@@ -7,8 +7,17 @@ namespace BookResellerWebScraper
     public class BookReSellData
     {
 
-        private string isbn;
-        
+        private BookInfo book;
+
+        public BookInfo Book { 
+            get => book; 
+            set {
+                if(value != null)
+                {
+                    book = value;
+                }
+            }
+        }
 
     }
 }

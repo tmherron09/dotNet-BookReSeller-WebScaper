@@ -115,8 +115,9 @@ namespace BookResellerWebScraper
 
         static async Task<bool> CheckIfValid(Page page)
         {
-            var missingElement = await page.QuerySelectorAsync("missing-content");
-            return missingElement == null;
+            var missingElement = await page.QuerySelectorAsync(".missing-content");
+            var resultTerm = await page.QuerySelectorAsync(".result__term");
+            return missingElement == null && resultTerm == null;
         }
 
         static async Task<string> GetInnerHtmlFromQuery(Page page, string query)

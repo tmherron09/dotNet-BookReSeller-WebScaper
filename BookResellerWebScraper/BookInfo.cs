@@ -58,8 +58,22 @@ namespace BookResellerWebScraper
             } catch(Exception ex)
             {
                 // TODO: Change to returning notification invalid ISBN or Not in System.
-                throw ex;
+                //throw ex;
+                Console.WriteLine(ex.Message);
             }
+        }
+
+        public bool IsValidBook()
+        {
+            if (Title == null || Author == null || ISBN == null) return false;
+            if (Title == "**Book Title Missing" && Author == "**Author Missing")
+            {
+                /* Assume if service is able to populate one or the other, ISBN was valid.
+                    Otherwise if both are missing, Assume Invalid entry returned */
+                return false;
+            }
+
+            return true;
         }
 
     }
