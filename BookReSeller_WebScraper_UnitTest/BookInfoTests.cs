@@ -73,5 +73,72 @@ namespace BookReSeller_WebScraper_UnitTest
             Assert.AreEqual(expectedAuthor, actualAuthor);
         }
 
+        [TestMethod]
+        public async Task IsValidBook_12345_False()
+        {
+            // Arrange
+            string shortISBN = "12345";
+            BookInfo book = new BookInfo();
+
+            bool expected = false;
+            bool actual;
+
+            //  Act
+            await book.InitializeAsync(shortISBN);
+            actual = book.IsValidBook();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public async Task IsValidBook_123456789012345_False()
+        {
+            // Arrange
+            string longISBN = "12345";
+            BookInfo book = new BookInfo();
+
+            bool expected = false;
+            bool actual;
+
+            //  Act
+            await book.InitializeAsync(longISBN);
+            actual = book.IsValidBook();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public async Task IsValidBook_1338596705_True()
+        {
+            // Arrange
+            string realISBN = "1338596705";
+            BookInfo book = new BookInfo();
+
+            bool expected = true;
+            bool actual;
+
+            //  Act
+            await book.InitializeAsync(realISBN);
+            actual = book.IsValidBook();
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public async Task IsValidBook_9780451452016_True()
+        {
+            // Arrange
+            string realISBN = "9780451452016";
+            BookInfo book = new BookInfo();
+
+            bool expected = true;
+            bool actual;
+
+            //  Act
+            await book.InitializeAsync(realISBN);
+            actual = book.IsValidBook();
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
