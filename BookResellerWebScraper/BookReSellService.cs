@@ -41,6 +41,28 @@ namespace BookResellerWebScraper
             }
         }
 
+        public static async Task<List<VendorResult>> GetAllVendorResults(BookInfo book)
+        {
+            List<VendorResult> vendorResults = new List<VendorResult>();
+            await InitialBrowserFetch();
+            var browser = await GetBrowser();
+            using (var page = await browser.NewPageAsync())
+            {
+                var url = $"https://bookscouter.com/search?query={book.ISBN}";
+                await page.GoToAsync(url, WaitUntilNavigation.Networkidle0);
+
+                List<ElementHandle> elementHandles = await GetElementHandles(page, "div.results a[data-price]");
+                await ParseVendorResultElementHandles(book, vendorResults, elementHandles);
+                await CheckCloseBrowser(browser);
+            }
+
+            return vendorResults;
+        }
+
+
+
+
+
         static async Task InitialBrowserFetch()
         {
             if (!HasInitializedBrowserFetch)
@@ -125,6 +147,30 @@ namespace BookResellerWebScraper
             var elementHandle = await page.QuerySelectorAsync(query);
             var jsHandle = await elementHandle.GetPropertyAsync("innerHTML");
             return TrimElementHandlerPropertyString(jsHandle);
+        }
+
+        static async Task<List<ElementHandle>> GetElementHandles(Page page, string query)
+        {
+            List<ElementHandle> elementHandles = new List<ElementHandle>();
+            var elementsArray = await page.QuerySelectorAllAsync(query);
+            elementHandles.AddRange(elementsArray);
+            return elementHandles;
+        }
+
+        static async Task ParseVendorResultElementHandles(BookInfo book, List<VendorResult> vendorResults, List<ElementHandle> elementHandles)
+        {
+            foreach (var element in elementHandles)
+            {
+                //var jsHandle = await element.GetPropertyAsync("dataset");
+                //var price = await element.GetPropertyAsync("dataset.price");
+                var price = decimal.Parse(await element.EvaluateFunctionAsync<string>("(el) => el.getAttribute(\"data-price\")", element));
+                var vendorId = await element.EvaluateFunctionAsync<string>("(el) => el.getAttribute(\"data-vendorid\")", element);
+                var vendorName = await element.EvaluateFunctionAsync<string>("(el) => el.getAttribute(\"data-vendor\")", element);
+
+                VendorResult result = new VendorResult(book, vendorId, vendorName, price);
+                //Console.WriteLine(result.ToString());
+                vendorResults.Add(result);
+            }
         }
 
         static string TrimElementHandlerPropertyString(string elementHandlerPropertyString) => elementHandlerPropertyString.Substring(9);
