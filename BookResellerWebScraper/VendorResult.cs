@@ -43,7 +43,7 @@ namespace BookResellerWebScraper
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendJoin(' ', new string[] { "Vendor Id:", VendorId, "Vendor Name:", VendorName, "|| Purchasing for", PurchasePrice.ToString("{0:C}") });
+            sb.AppendJoin(' ', new string[] { "Vendor Id:", VendorId, "Vendor Name:", VendorName, "|| Purchasing for", PurchasePrice.ToString("C") });
             return sb.ToString();
         }
 
