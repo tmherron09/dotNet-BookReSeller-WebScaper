@@ -1,6 +1,7 @@
 ﻿using BookResellerWebScraper;
 using PuppeteerSharp;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,15 +17,40 @@ namespace WebScraper_BookReseller
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Book ReSeller Web Scraper");
-            
-            string redDwarf = "0140174664";
-            string redGreen = "0385667752";
 
-            await RunISBN(redDwarf);
-            await RunISBN(redGreen);
+            if (IsbnImporter.IsbnListExists())
+            {
+                List<string> isbnToCheck = IsbnImporter.ReadFromTxtFilePerLine();
+                Console.WriteLine("Processing ISBN list...\n\n");
+                foreach(var isbn in isbnToCheck)
+                {
+                    await RunISBN(isbn.Trim());
+                    Console.WriteLine("\n\n");
+                }
 
-            Console.Read();
+            } else
+            {
+                Console.WriteLine("No isbn_list.txt in program folder. Please try again.");
+            }
+            //Console.WriteLine("Book ReSeller Web Scraper");
+
+            //if (args.Length == 0)
+            //{
+            //    string redDwarf = "0140174664";
+            //    string redGreen = "0385667752";
+
+            //    await RunISBN(redDwarf);
+            //    await RunISBN(redGreen);
+            //} else
+            //{
+            //    foreach(var isbn in args)
+            //    {
+            //        await RunISBN(isbn);
+            //    }
+            //}
+
+            Console.WriteLine("Press Any Key To Exit...");
+            Console.ReadKey();
         }
 
         static async Task RunISBN(string isbn)
