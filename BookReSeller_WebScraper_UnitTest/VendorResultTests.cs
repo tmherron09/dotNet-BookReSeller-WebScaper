@@ -49,7 +49,6 @@ namespace BookReSeller_WebScraper_UnitTest
             actual = result.GetLinkToVendor();
 
             Assert.AreEqual(expected, actual);
-
         }
         
         

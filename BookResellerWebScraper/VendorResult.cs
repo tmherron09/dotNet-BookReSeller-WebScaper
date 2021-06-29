@@ -40,6 +40,10 @@ namespace BookResellerWebScraper
         }
 
         public string GetLinkToVendor() => $"https://api.bookscouter.com/exits/sell/{VendorId}/{Book.ISBN}";
+        public string ToCSVString() => $"{VendorId},{VendorName},{PurchasePrice.ToString("C")},{Link}";
+            
+
+        
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

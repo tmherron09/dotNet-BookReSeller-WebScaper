@@ -60,9 +60,6 @@ namespace BookResellerWebScraper
         }
 
 
-
-
-
         static async Task InitialBrowserFetch()
         {
             if (!HasInitializedBrowserFetch)

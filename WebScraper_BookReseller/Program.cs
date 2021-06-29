@@ -17,21 +17,29 @@ namespace WebScraper_BookReseller
     {
         static async Task Main(string[] args)
         {
+            BookInfo book = new BookInfo();
+            await book.InitializeAsync("0140174664");
+            BookReSellData bookData = new BookReSellData(book);
+            await bookData.PopulateVendorResultsAsync();
+            CSVExporter.WriteToCSVFile(bookData);
 
-            if (IsbnImporter.IsbnListExists())
-            {
-                List<string> isbnToCheck = IsbnImporter.ReadFromTxtFilePerLine();
-                Console.WriteLine("Processing ISBN list...\n\n");
-                foreach(var isbn in isbnToCheck)
-                {
-                    await RunISBN(isbn.Trim());
-                    Console.WriteLine("\n\n");
-                }
 
-            } else
-            {
-                Console.WriteLine("No isbn_list.txt in program folder. Please try again.");
-            }
+            /* ISBN Importer Example */
+
+            //if (IsbnImporter.IsbnListExists())
+            //{
+            //    List<string> isbnToCheck = IsbnImporter.ReadFromTxtFilePerLine();
+            //    Console.WriteLine("Processing ISBN list...\n\n");
+            //    foreach(var isbn in isbnToCheck)
+            //    {
+            //        await RunISBN(isbn.Trim());
+            //        Console.WriteLine("\n\n");
+            //    }
+
+            //} else
+            //{
+            //    Console.WriteLine("No isbn_list.txt in program folder. Please try again.");
+            //}
             //Console.WriteLine("Book ReSeller Web Scraper");
 
             //if (args.Length == 0)
